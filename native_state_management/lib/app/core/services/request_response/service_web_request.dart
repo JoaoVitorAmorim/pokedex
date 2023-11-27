@@ -16,23 +16,29 @@ final class ServiceWebHttp implements IServiceWebRequest {
   Future<IServiceWebResponse> get(String url,
       {Map<String, String>? headers}) async {
     late final http.Response response;
-
-    if (kIsWeb) {
-      response = await retry(
-        () => http.get(Uri.parse(url), headers: headers),
-        retryIf: (e) => e is SocketException || e is TimeoutException,
+    try {
+      if (kIsWeb) {
+        response = await retry(
+          () => http.get(Uri.parse(url), headers: headers),
+          retryIf: (e) => e is SocketException || e is TimeoutException,
+        );
+      } else {
+        response = await Isolate.run<http.Response>(() => retry(
+              () => http.get(Uri.parse(url), headers: headers),
+              retryIf: (e) => e is SocketException || e is TimeoutException,
+            ));
+      }
+      return ServiceWebResponse(
+          statusCode: response.statusCode,
+          body: response.body,
+          headers: response.headers);
+    } catch (e) {
+      return ServiceWebResponse(
+        statusCode: 500,
+        body: 'detail:${e.toString()}',
+        headers: {},
       );
-    } else {
-      response = await Isolate.run<http.Response>(() => retry(
-            () => http.get(Uri.parse(url), headers: headers),
-            retryIf: (e) => e is SocketException || e is TimeoutException,
-          ));
     }
-
-    return ServiceWebResponse(
-        statusCode: response.statusCode,
-        body: response.body,
-        headers: response.headers);
   }
 
   @override

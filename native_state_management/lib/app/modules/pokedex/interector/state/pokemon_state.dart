@@ -3,12 +3,22 @@ import 'package:native_state_management/app/modules/pokedex/interector/models/po
 
 sealed class PokemonState {}
 
+class PokemonSleeping implements PokemonState {}
+
 class PokemonStateLoading implements PokemonState {}
 
-class PokemonStateSuccess implements PokemonState {
+class PokemonStartAnimation implements PokemonState {}
+
+class PokemonListStateSuccess implements PokemonState {
   final List<Pokemon> pokemons;
 
-  const PokemonStateSuccess(this.pokemons);
+  const PokemonListStateSuccess(this.pokemons);
+}
+
+class PokemonCompleteLoadListSuccess implements PokemonState {
+  final List<Pokemon> pokemons;
+
+  const PokemonCompleteLoadListSuccess(this.pokemons);
 }
 
 class PokemonStateFailure implements PokemonState {
