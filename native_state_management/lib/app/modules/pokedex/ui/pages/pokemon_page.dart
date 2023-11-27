@@ -1,9 +1,10 @@
 import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:native_state_management/app/modules/pokedex/interector/controllers/pokemon_controller.dart';
 import 'package:native_state_management/app/modules/pokedex/interector/models/pokemon.dart';
 import 'package:native_state_management/app/modules/pokedex/interector/state/pokemon_state.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:native_state_management/app/modules/pokedex/ui/pages/pokemon_error_page.dart';
 import 'package:native_state_management/app/modules/pokedex/ui/pages/pokemon_intro.dart';
 import 'package:native_state_management/app/modules/pokedex/ui/widgets/pokemon_tile.dart';
@@ -78,7 +79,7 @@ class _PokemonPageState extends State<PokemonPage> {
   }
 
   triggerFirstLoad() async {
-    await Future.delayed(const Duration(milliseconds: 1800))
+    await Future.delayed(const Duration(milliseconds: 4000))
         .then((value) => widget.pokemonController.loadPokemons());
   }
 
